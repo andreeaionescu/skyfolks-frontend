@@ -30,7 +30,7 @@ export default function SimpleAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Automated Detection of Hazards
+            SkyFolks - Automated Detection of Hazards
           </Typography>
         </Toolbar>
       </AppBar>
