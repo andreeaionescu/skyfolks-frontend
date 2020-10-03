@@ -7,7 +7,7 @@ export default function Marker(props) {
         <div>
             <Button color="inherit" >
                 <LocationOnTwoTone style={{ margin: '0 auto' }} />
-                    Pin
+                    HURRICANE
             </Button>
       </div>
     )
