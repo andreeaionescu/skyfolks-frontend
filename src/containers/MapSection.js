@@ -56,7 +56,7 @@ function MapSection(props) {
     return (
         <div style={{ height: "100vh", width: "100%" }}>
         <GoogleMap
-          bootstrapURLKeys={{ key: "AIzaSyCov8v3MgRCgus3iEvMEmtUoN2jmswptbw" }}
+          bootstrapURLKeys={{ key: process.env.GOOGLE_MAPS_API_KEY }}
           defaultCenter={{
             lat: 51.5074,
             lng: 0.1278
