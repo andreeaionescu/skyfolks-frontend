@@ -1,11 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Drawer, Divider } from '@material-ui/core';
+import { Drawer, Divider, Grid } from '@material-ui/core';
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import SimpleAppBar from '../components/SimpleAppBar.js';
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,9 +11,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FlashOnTwoTone from '@material-ui/icons/FlashOnTwoTone'
 import WhatshotTwoTone from "@material-ui/icons/WhatshotTwoTone";
 import LocationOnTwoTone from "@material-ui/icons/LocationOnTwoTone";
+import PieChartRounded from '@material-ui/icons/PieChartRounded';
+import HazardAnalyticsSection from './HazardAnalyticsSection.js';
 
 
 const drawerWidth = 240;
+const drawerWidthAnalytics = 480;
 const useStyles = makeStyles((theme) => ({
     root: {
       display: 'flex',
@@ -36,6 +36,14 @@ const useStyles = makeStyles((theme) => ({
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
       })
+    },
+    appBarShiftAnalytics :{
+        width: `calc(100% - ${drawerWidthAnalytics}px)`,
+        transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginRight: drawerWidthAnalytics,
     },
     menuButton: {
       marginRight: 36,
@@ -66,6 +74,17 @@ const useStyles = makeStyles((theme) => ({
             width: theme.spacing(9) + 1,
         },
     },
+    drawerPaper: {
+        width: drawerWidthAnalytics,
+    },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(0, 1),
+        // necessary for content to be below app bar
+        minHeight: '64px',
+        justifyContent: 'flex-start',
+    },
     toolbar: {
         display: 'flex',
         alignItems: 'center',
@@ -80,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function MenuSection() {
+function MenuSection(props) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -93,29 +112,62 @@ function MenuSection() {
       setOpen(false);
     };
 
+    const [openAnalytics, setOpenAnalytics] = React.useState(false);
+
+    const handleAnalyticsOpen = () => {
+        console.log("clicked")
+        setOpenAnalytics(true);
+    };
+
+    const handleAnalyticsClose = () => {
+        setOpenAnalytics(false);
+    };
+
     return (
         <div className={classes.root}>
             <AppBar
                 position="fixed"
                 className={clsx(classes.appBar, {
                     [classes.appBarShift]: open,
+                    [classes.appBarShiftAnalytics]: openAnalytics,
                 })}
             >
                 <Toolbar>
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerOpen}
-                    edge="start"
-                    className={clsx(classes.menuButton, {
-                        [classes.hide]: open,
-                    })}
-                >
-                    <MenuIcon />
-                </IconButton>
-                <Typography variant="h6" noWrap>
-                    Automated Detection of Hazards
-                </Typography>
+                    <Grid container justify="space-between">
+                        <Grid item>
+                            <Grid container justify="flex-start" alignItems="center">
+                                <Grid item>
+                                    <IconButton
+                                        color="inherit"
+                                        aria-label="open drawer"
+                                        onClick={handleDrawerOpen}
+                                        edge="start"
+                                        className={clsx(classes.menuButton, {
+                                            [classes.hide]: open,
+                                        })}
+                                    >
+                                        <MenuIcon />
+                                    </IconButton>
+                                </Grid>
+                                <Grid item>
+                                    <Typography variant="h6" noWrap>
+                                        Automated Detection of Hazards
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open analytics"
+                                onClick={handleAnalyticsOpen}
+                                edge="end"
+                                className={clsx(openAnalytics && classes.hide)}
+                            >
+                                <PieChartRounded />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -139,18 +191,36 @@ function MenuSection() {
                 <Divider />
                 <List>
                     <ListItem button>
-                        <ListItemIcon><FlashOnTwoTone color="secondary"/></ListItemIcon>
+                        <ListItemIcon><FlashOnTwoTone color="secondary" size="large"/></ListItemIcon>
                         <ListItemText primary={"Hurricanes"} />
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><WhatshotTwoTone color="error"/></ListItemIcon>
+                        <ListItemIcon><WhatshotTwoTone color="error" size="large"/></ListItemIcon>
                         <ListItemText primary={"Wildfires"} />
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><LocationOnTwoTone color="primary"/></ListItemIcon>
+                        <ListItemIcon><LocationOnTwoTone color="primary" size="large"/></ListItemIcon>
                         <ListItemText primary={"Earthquakes"} />
                     </ListItem>
                 </List>
+            </Drawer>
+            <Drawer
+                className={classes.drawer}
+                variant="persistent"
+                anchor="right"
+                open={openAnalytics}
+                classes={{
+                paper: classes.drawerPaper,
+                }}
+            >
+                <div className={classes.drawerHeader}>
+                    <IconButton onClick={handleAnalyticsClose}>
+                        {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                    </IconButton>
+                </div>
+                <Divider />
+                <HazardAnalyticsSection/>
+                <Divider />
             </Drawer>
         </div>
     );

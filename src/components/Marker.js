@@ -4,7 +4,7 @@ import { LocationOnTwoTone, WhatshotTwoTone } from "@material-ui/icons";
 
 export default function Marker(props) {
     return (
-        <div>
+        <div style={{height: "100vh"}}>
             <Button color="inherit">
                 {props.hazardType == "hurricane" ? <LocationOnTwoTone color="secondary" /> : <WhatshotTwoTone color="error"/>} 
                 {props.name}

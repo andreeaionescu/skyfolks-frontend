@@ -4,10 +4,23 @@ import { connect } from 'react-redux';
 import Marker from './../components/Marker.js';
 import { fetchHazardsActionCreator, fetchHazardAnalyticsByIdActionCreator } from '../actions/hazardAnalysis.js';
 
-function MapSection() {
-
+function MapSection(props) {
+    
     const mapType = "satellite"
     const handleOnClick = ({x, y, lat, lng, event}) => console.log(x, y, lat, lng, event)
+
+    const handleMultipleMarkers = ()  => 
+        props.analytics.map((item, index) => (
+            <Marker 
+                key={item.id}
+                //position={{ lat: item.latitude, lng: item.longitude}}
+                lat={item.latitude}
+                lng={item.longitude}
+                name={item.name}
+                hazardType={item.hazardType}  
+            />
+        ))
+    const markers = handleMultipleMarkers()
 
     return (
         <div style={{ height: "100vh", width: "100%" }}>
@@ -33,12 +46,9 @@ function MapSection() {
                
           }}
           onClick={handleOnClick} 
-          
-        >
-          <Marker
-            lat={46.952653}
-            lng={26.900636}
-          />
+        >  
+            {markers}
+
         </GoogleMap>
       </div>
     )
