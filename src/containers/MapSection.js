@@ -10,17 +10,48 @@ function MapSection(props) {
     const handleOnClick = ({x, y, lat, lng, event}) => console.log(x, y, lat, lng, event)
 
     const handleMultipleMarkers = ()  => 
-        props.analytics.map((item, index) => (
+        props.analytics.map((marker, index) => (
             <Marker 
-                key={item.id}
-                //position={{ lat: item.latitude, lng: item.longitude}}
-                lat={item.latitude}
-                lng={item.longitude}
-                name={item.name}
-                hazardType={item.hazardType}  
+                key={marker.id}
+                lat={marker.latitude}
+                lng={marker.longitude}
+                name={marker.name}
+                hazardType={marker.hazardType}  
             />
         ))
     const markers = handleMultipleMarkers()
+
+    // Return map bounds based on list of places
+    const getMapBounds = (map, maps, places) => {
+        const bounds = new maps.LatLngBounds();
+    
+        places.forEach((place) => {
+        bounds.extend(new maps.LatLng(
+            place.latitude,
+            place.longitude,
+        ));
+        });
+        return bounds;
+    };
+    
+    // Re-center map when resizing the window
+    const bindResizeListener = (map, maps, bounds) => {
+        maps.event.addDomListenerOnce(map, 'idle', () => {
+        maps.event.addDomListener(window, 'resize', () => {
+            map.fitBounds(bounds);
+        });
+        });
+    };
+    
+    // Fit map to its bounds after the api is loaded
+    const apiIsLoaded = (map, maps, places) => {
+        // Get bounds by our places
+        const bounds = getMapBounds(map, maps, places);
+        // Fit map to bounds
+        map.fitBounds(bounds);
+        // Bind the resize listener
+        bindResizeListener(map, maps, bounds);
+    };
 
     return (
         <div style={{ height: "100vh", width: "100%" }}>
@@ -45,6 +76,8 @@ function MapSection(props) {
             //styles: [...administrative, ...landscape, ...poi, ...road, ...transit, ...water]
                
           }}
+          yesIWantToUseGoogleMapApiInternals
+          onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps, props.analytics)}
           onClick={handleOnClick} 
         >  
             {markers}

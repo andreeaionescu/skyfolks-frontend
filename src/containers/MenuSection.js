@@ -8,7 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import FlashOnTwoTone from '@material-ui/icons/FlashOnTwoTone'
+import FlashOnTwoTone from '@material-ui/icons/FlashOnTwoTone';
 import WhatshotTwoTone from "@material-ui/icons/WhatshotTwoTone";
 import LocationOnTwoTone from "@material-ui/icons/LocationOnTwoTone";
 import PieChartRounded from '@material-ui/icons/PieChartRounded';
