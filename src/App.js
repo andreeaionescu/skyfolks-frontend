@@ -1,16 +1,22 @@
 import React from 'react';
 import { CssBaseline } from '@material-ui/core';
 import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { indigo, amber } from '@material-ui/core/colors'
-import SimpleAppBar from './components/SimpleAppBar.js'
-import WorldMap from './components/WorldMap';
+import { teal, amber, red } from '@material-ui/core/colors'
+import MenuSection from './containers/MenuSection'
+import MapSection from './containers/MapSection.js';
 
 
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
-    primary: indigo,
+    primary: teal,
     secondary: amber,
+    error: {
+      light: red[300],
+      main: red[500],
+      dark: red[700],
+      contrastText: "#fff"
+    },
     divider: 'rgba(255, 255, 255, 0.12)'
   }
 })
@@ -36,8 +42,8 @@ function App() {
     <div style={{flexGrow:1, height:'100%'}}>
        <ThemeProvider theme={theme}>
           <CssBaseline />           
-          <SimpleAppBar />
-          <WorldMap />
+          <MenuSection />
+          <MapSection />
       </ThemeProvider>
     </div>
   );

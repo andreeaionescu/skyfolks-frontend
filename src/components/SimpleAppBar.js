@@ -23,7 +23,7 @@ export default function SimpleAppBar() {
   const classes = useStyles();
 
   return (
-      <AppBar position="static">
+      <AppBar position="static" style={{backgroundColor: "#333"}}>
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
