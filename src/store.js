@@ -105,7 +105,47 @@ export const initialState = {
                     }
                 }
             ]
-        }
+        },
+        {
+            id: "4",
+            selected: false,
+            latitude: 47.244,
+            longitude: -122.21,
+            hazardType: "wildfire",
+            name: "Tacoma, Washington"
+        },
+        {
+            id: "5",
+            selected: false,
+            latitude: 37.8250,
+            longitude: 23.9772,
+            hazardType: "wildfire",
+            name: "Feriza, Kamariza, Greece"
+        },
+        {
+            id: "6",
+            selected: false,
+            latitude: 38.7128,
+            longitude: -122.3021,
+            hazardType: "wildfire",
+            name: "Napa County, California"
+        },
+        {
+            id: "8",
+            selected: false,
+            latitude: 36.1772,
+            longitude: -121.606,
+            hazardType: "wildfire",
+            name: "Monterey County, California"
+        },
+        {
+            id: "9",
+            selected: false,
+            latitude: 32.8725,
+            longitude: -116.76,
+            hazardType: "wildfire",
+            name: "National City, California"
+        },
     ],
     prediction: []
   };
