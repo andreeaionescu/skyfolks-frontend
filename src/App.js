@@ -42,7 +42,7 @@ function App() {
        <ThemeProvider theme={theme}>
           <CssBaseline />           
           <MenuSection />
-          <MapSection />
+          {/* <MapSection /> */}
       </ThemeProvider>
     </div>
   );

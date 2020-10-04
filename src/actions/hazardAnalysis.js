@@ -10,6 +10,11 @@ export const receiveHazardAnalyticsById = data => ({
     data
 })
 
+export const toggleAnalyticsHazard= id => ({
+    type: 'TOGGLE_ANALYTICS_HAZARD',
+    id
+  })
+
 export const receiveError = err => ({
     type: 'RECEIVE_ERROR',
     err

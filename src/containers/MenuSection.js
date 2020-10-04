@@ -13,6 +13,7 @@ import WhatshotTwoTone from "@material-ui/icons/WhatshotTwoTone";
 import LocationOnTwoTone from "@material-ui/icons/LocationOnTwoTone";
 import PieChartRounded from '@material-ui/icons/PieChartRounded';
 import HazardAnalyticsSection from './HazardAnalyticsSection.js';
+import MapSection from './MapSection.js';
 
 
 const drawerWidth = 240;
@@ -52,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'none',
     },
     drawer: {
-        width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
     },
@@ -103,6 +103,7 @@ function MenuSection(props) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [marker, setMarker] = React.useState({});
   
     const handleDrawerOpen = () => {
       setOpen(true);
@@ -204,6 +205,9 @@ function MenuSection(props) {
                     </ListItem>
                 </List>
             </Drawer>
+            
+            <MapSection handleAnalyticsOpen={handleAnalyticsOpen} updateSelectedMarker={setMarker}/>
+            
             <Drawer
                 className={classes.drawer}
                 variant="persistent"
@@ -219,7 +223,7 @@ function MenuSection(props) {
                     </IconButton>
                 </div>
                 <Divider />
-                <HazardAnalyticsSection/>
+                { <HazardAnalyticsSection marker={marker}/> && marker.selected}
                 <Divider />
             </Drawer>
         </div>

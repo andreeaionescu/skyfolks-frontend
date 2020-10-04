@@ -2,27 +2,35 @@ import React from 'react';
 import GoogleMap from 'google-map-react';
 import { connect } from 'react-redux';
 import Marker from './../components/Marker.js';
-import { fetchHazardsActionCreator, fetchHazardAnalyticsByIdActionCreator } from '../actions/hazardAnalysis.js';
+import { toggleAnalyticsHazard, fetchHazardsActionCreator, fetchHazardAnalyticsByIdActionCreator } from '../actions/hazardAnalysis.js';
+import { predictHazardActionCreator } from '../actions/predictHazard.js'
 
-function MapSection(props) {
+class MapSection extends React.Component {
     
-    const mapType = "satellite"
-    const handleOnClick = ({x, y, lat, lng, event}) => console.log(x, y, lat, lng, event)
+    constructor(props) {
+        super(props);
 
-    const handleMultipleMarkers = ()  => 
-        props.analytics.map((marker, index) => (
-            <Marker 
-                key={marker.id}
-                lat={marker.latitude}
-                lng={marker.longitude}
-                name={marker.name}
-                hazardType={marker.hazardType}  
-            />
-        ))
-    const markers = handleMultipleMarkers()
+        this.handleOnClick = this.handleOnClick.bind(this);
+        this.apiIsLoaded = this.apiIsLoaded.bind(this);
+        this.getMapBounds = this.getMapBounds.bind(this);
+        this.bindResizeListener = this.bindResizeListener.bind(this);
+        this.handleOnMarkerClick = this.handleOnMarkerClick.bind(this);
+      }
+    
+
+    handleOnClick({x, y, lat, lng, event}){
+        let latitude = lat
+        let longitude = lng
+        event.preventDefault();
+        console.log(x, y, latitude, longitude, event)
+        let predict = ["hurricane"]
+        this.setState({newPredict: {latitude: latitude, longitude: longitude, predict: predict}});
+        this.props.handlePredictHazard({latitude, longitude, predict})
+        //this.props.addHazard({latitude, longitude})
+    }
 
     // Return map bounds based on list of places
-    const getMapBounds = (map, maps, places) => {
+    getMapBounds(map, maps, places){
         const bounds = new maps.LatLngBounds();
     
         places.forEach((place) => {
@@ -35,7 +43,7 @@ function MapSection(props) {
     };
     
     // Re-center map when resizing the window
-    const bindResizeListener = (map, maps, bounds) => {
+    bindResizeListener(map, maps, bounds){
         maps.event.addDomListenerOnce(map, 'idle', () => {
         maps.event.addDomListener(window, 'resize', () => {
             map.fitBounds(bounds);
@@ -44,47 +52,69 @@ function MapSection(props) {
     };
     
     // Fit map to its bounds after the api is loaded
-    const apiIsLoaded = (map, maps, places) => {
+    apiIsLoaded(map, maps, places){
         // Get bounds by our places
-        const bounds = getMapBounds(map, maps, places);
+        const bounds = this.getMapBounds(map, maps, places);
         // Fit map to bounds
         map.fitBounds(bounds);
         // Bind the resize listener
-        bindResizeListener(map, maps, bounds);
+        this.bindResizeListener(map, maps, bounds);
     };
 
-    return (
-        <div style={{ height: "100vh", width: "100%" }}>
-        <GoogleMap
-          bootstrapURLKeys={{ key: process.env.GOOGLE_MAPS_API_KEY }}
-          defaultCenter={{
-            lat: 51.5074,
-            lng: 0.1278
-          }}
-          defaultZoom={1}
-          options={{ 
-            minZoom: 3,
-            mapTypeId: mapType,
-            mapTypeControl: true,
-            
-            //fullscreenControl: false,
-            // zoomControl: false,
-            // streetViewControl: false,
-            // scaleControl: true,
-            
-            //mapTypeControlOptions,
-            //styles: [...administrative, ...landscape, ...poi, ...road, ...transit, ...water]
-               
-          }}
-          yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps, props.analytics)}
-          onClick={handleOnClick} 
-        >  
-            {markers}
+    handleOnMarkerClick(marker){
+        // event.preventDefault();
+        // console.log(marker)
+         // this.props.handleToggle(marker.id)
+        // this.props.updateSelectedMarker(marker)
+        // this.props.handleHazardAnalyticsById(marker)
+        
+    }
 
-        </GoogleMap>
-      </div>
-    )
+    render() {
+        return (
+            <div style={{ height: "100vh", width: "100%"}}>
+            <GoogleMap
+            bootstrapURLKeys={{ key: "AIzaSyCov8v3MgRCgus3iEvMEmtUoN2jmswptbw" }}
+            defaultCenter={{
+                lat: 51.5074,
+                lng: 0.1278
+            }}
+            defaultZoom={1}
+            options={{ 
+                minZoom: 3,
+                mapTypeId: "satellite",
+                mapTypeControl: true,
+                
+                //fullscreenControl: false,
+                // zoomControl: false,
+                // streetViewControl: false,
+                // scaleControl: true,
+                
+                //mapTypeControlOptions,
+                //styles: [...administrative, ...landscape, ...poi, ...road, ...transit, ...water]
+                
+            }}
+            yesIWantToUseGoogleMapApiInternals
+            onGoogleApiLoaded={({ map, maps }) => this.apiIsLoaded(map, maps, this.props.analytics)}
+            onClick={this.handleOnClick} 
+            >  
+                { this.props.analytics &&
+                    this.props.analytics.map((marker, index) => (
+                        <Marker 
+                            key={marker.id}
+                            lat={marker.latitude}
+                            lng={marker.longitude}
+                            name={marker.name}
+                            hazardType={marker.hazardType}  
+                            handleOnClick={this.handleOnMarkerClick(marker)}
+                        />
+                        ))
+                }
+
+            </GoogleMap>
+        </div>
+        )
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -93,7 +123,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
     handleAllHazards: () => dispatch(fetchHazardsActionCreator()),
-    handleHazardAnalyticsById: id => dispatch(fetchHazardAnalyticsByIdActionCreator(id))
+    handleHazardAnalyticsById: id => dispatch(fetchHazardAnalyticsByIdActionCreator(id)),
+    handlePredictHazard: ({latitude, longitude, predict}) => dispatch(predictHazardActionCreator({latitude, longitude, predict})),
+    handleToggle: (id) => dispatch(toggleAnalyticsHazard(id)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapSection)

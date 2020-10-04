@@ -1,4 +1,4 @@
 {   
     "presets": ["react", "es2015", "env"],
-    "plugins": ["transform-class-properties", ["transform-runtime", { "regenerator": true }] ]
+    "plugins": ["transform-object-rest-spread", "transform-class-properties", ["transform-runtime", { "regenerator": true }] ]
 }
