@@ -20,6 +20,9 @@
     "build": "webpack"
   },
   "dependencies": {
+    "@devexpress/dx-react-chart": "^2.7.2",
+    "@devexpress/dx-react-chart-material-ui": "^2.7.2",
+    "@devexpress/dx-react-core": "^2.7.2",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "google-map-react": "^2.1.7",

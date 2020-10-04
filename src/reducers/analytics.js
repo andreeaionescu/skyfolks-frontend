@@ -12,7 +12,7 @@ const analytics = (state = [], action) => {
               predicted: [
                   {
                       hazardType: "hurricane",
-                      probability: (action.data.predicted[0].probability * 100).toString() + "%"
+                      probability: action.data.predicted[0].probability
                   }
               ]
           }]
